@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -33,6 +34,21 @@ public class ContactListActivity extends ListActivity {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+
+		case R.id.action_add:
+			//Start the contact activity with no data
+			Intent contactIntent = new Intent(this, ContactActivity.class);
+			startActivity(contactIntent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {

@@ -44,7 +44,7 @@ public class ContactActivity extends Activity implements OnClickListener{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.contact_list, menu);
+		getMenuInflater().inflate(R.menu.contact, menu);
 		return true;
 	}
 
@@ -63,6 +63,7 @@ public class ContactActivity extends Activity implements OnClickListener{
 			break;
 		case R.id.saveButton:
 			//TODO save
+			this.getActionBar().setTitle(contactNameEditText.getText().toString());
 			break;
 		}
 		
