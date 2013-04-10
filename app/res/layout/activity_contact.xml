@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This page has its main content nested in a scroll view, so future content can be added without worrying about fitting on screen -->
+<!-- This page has its main content nested in a scroll view, so future content can be added without worrying about it always fitting on screen -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,20 +20,21 @@
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:id="@+id/contactNumberTextView"
+                    android:id="@+id/contactNameTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/contact_number"
+                    android:padding="8dp"
+                    android:text="@string/contact_name"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <EditText
-                    android:id="@+id/contactNumberEditText"
+                    android:id="@+id/contactNameEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:ems="10"
-                    android:inputType="phone" >
+                    android:inputType="textPersonName" >
 
                     <requestFocus />
                 </EditText>
@@ -44,44 +45,45 @@
                 android:layout_height="wrap_content" >
 
                 <TextView
-                    android:id="@+id/contactNameTextView"
+                    android:id="@+id/contactNumberTextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/contact_name"
+                    android:padding="8dp"
+                    android:text="@string/contact_number"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <EditText
-                    android:id="@+id/contactNameEditText"
+                    android:id="@+id/contactNumberEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:ems="10"
-                    android:inputType="textPersonName" />
+                    android:inputType="phone" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="?android:attr/buttonBarStyle" >
+        android:layout_height="wrap_content" >
 
         <Button
             android:id="@+id/messageButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/message_button" 
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:text="@string/message_button" />
 
         <Button
             android:id="@+id/saveButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="@string/save_button" 
-            style="?android:attr/buttonBarButtonStyle"/>
+            android:text="@string/save_button" />
     </LinearLayout>
 
 </LinearLayout>
