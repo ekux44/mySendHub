@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class MessageActivity extends Activity implements OnClickListener{
 			
 			sendButton = (Button)this.findViewById(R.id.sendButton);
 			sendButton.setOnClickListener(this);
+			
+			this.getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
 
@@ -58,4 +61,17 @@ public class MessageActivity extends Activity implements OnClickListener{
 		
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			//up button pressed
+			//TODO go up instead of back
+			this.onBackPressed();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }

@@ -47,7 +47,7 @@ public class DatabaseDefinitions {
 		}
 	}
 
-	public static final String AUTHORITY = "com.kuxhausen.provider.sendhub.database";
+	public static final String AUTHORITY = "com.kuxhausen.provider.sendhub.persistence";
 
 	// This class cannot be instantiated
 	private DatabaseDefinitions() {

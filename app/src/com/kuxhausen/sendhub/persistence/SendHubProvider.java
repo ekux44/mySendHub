@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-public class HueMoreProvider extends ContentProvider {
+public class SendHubProvider extends ContentProvider {
 
 	DatabaseHelper mOpenHelper;
 

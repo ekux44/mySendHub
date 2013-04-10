@@ -24,6 +24,9 @@
         </activity>
         <activity android:name="ContactActivity"></activity>
         <activity android:name="MessageActivity"></activity>
+        <provider android:exported="false" 
+            android:authorities="com.kuxhausen.provider.sendhub.persistence"
+            android:name=".persistence.SendHubProvider"></provider>
     </application>
 
 </manifest>
