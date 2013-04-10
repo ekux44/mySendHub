@@ -68,7 +68,7 @@
         style="?android:attr/buttonBarStyle" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/messageButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -76,7 +76,7 @@
             style="?android:attr/buttonBarButtonStyle"/>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/saveButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
