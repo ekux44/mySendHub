@@ -1,4 +1,4 @@
-package com.kuxhausen.sendhub;
+package com.kuxhausen.sendhub.persistence;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

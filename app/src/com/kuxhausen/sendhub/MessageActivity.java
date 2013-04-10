@@ -1,6 +1,6 @@
 package com.kuxhausen.sendhub;
 
-import com.kuxhausen.sendhub.DatabaseDefinitions.IntentExtraKeys;
+import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
 import android.os.Bundle;
 import android.app.Activity;

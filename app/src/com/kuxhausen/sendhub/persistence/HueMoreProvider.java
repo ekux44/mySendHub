@@ -1,8 +1,8 @@
-package com.kuxhausen.sendhub;
+package com.kuxhausen.sendhub.persistence;
 
 import java.util.HashMap;
 
-import com.kuxhausen.sendhub.DatabaseDefinitions.ContactColumns;
+import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
