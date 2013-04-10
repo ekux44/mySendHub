@@ -1,5 +1,7 @@
 package com.kuxhausen.sendhub;
 
+import com.kuxhausen.sendhub.DatabaseDefinitions.IntentExtraKeys;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ListActivity;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ContactListActivity extends ListActivity {
 
@@ -33,8 +36,12 @@ public class ContactListActivity extends ListActivity {
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Intent i = new Intent(this, ContactActivity.class);
-		startActivity(i);
+		Bundle contactData = new Bundle();
+		contactData.putString(IntentExtraKeys.CONTACT_NAME, ((TextView)v).getText().toString());
+		
+		Intent contactIntent = new Intent(this, ContactActivity.class);
+		contactIntent.putExtras(contactData);
+		startActivity(contactIntent);
 		
 
 	}

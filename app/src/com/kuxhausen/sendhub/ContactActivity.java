@@ -1,4 +1,6 @@
 package com.kuxhausen.sendhub;
+import com.kuxhausen.sendhub.DatabaseDefinitions.IntentExtraKeys;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-
+//TODO validate EditText's when their next/done keyboard buttons pressed
 public class ContactActivity extends Activity implements OnClickListener{
 
 	private Button messageButton, saveButton;
@@ -26,10 +28,16 @@ public class ContactActivity extends Activity implements OnClickListener{
 		saveButton.setOnClickListener(this);
 		
 		contactNameEditText = (EditText)this.findViewById(R.id.contactNameEditText);
-		contactNameEditText.setOnClickListener(this);
 		
 		contactNumberEditText = (EditText)this.findViewById(R.id.contactNumberEditText);
-		contactNumberEditText.setOnClickListener(this);
+		
+		Bundle intentContactData = getIntent().getExtras();
+		if(intentContactData!=null){
+			String contactName = intentContactData.getString(IntentExtraKeys.CONTACT_NAME);
+			contactNameEditText.setText(contactName);
+			this.getActionBar().setTitle(contactName);
+			//TODO look up number from database if it exists
+		}
 		
 	}
 
@@ -42,10 +50,16 @@ public class ContactActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
+		//TODO validate number and notify user if invalid instead of continuing
 		switch(v.getId()){
 		case R.id.messageButton:
-			Intent i = new Intent(this, MessageActivity.class);
-			startActivity(i);
+			Bundle contactData = new Bundle();
+			contactData.putString(IntentExtraKeys.CONTACT_NAME, contactNameEditText.getText().toString());
+			contactData.putString(IntentExtraKeys.CONTACT_NUMBER, contactNumberEditText.getText().toString());
+			
+			Intent messageIntent = new Intent(this, MessageActivity.class);
+			messageIntent.putExtras(contactData);
+			startActivity(messageIntent);
 			break;
 		case R.id.saveButton:
 			//TODO save
