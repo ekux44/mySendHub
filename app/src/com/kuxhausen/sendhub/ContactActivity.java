@@ -1,10 +1,13 @@
 package com.kuxhausen.sendhub;
+import java.util.ArrayList;
+
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +22,7 @@ public class ContactActivity extends Activity implements OnClickListener{
 
 	private Button messageButton, saveButton;
 	private EditText contactNameEditText, contactNumberEditText;
+	private String initialContactName, initialContactNumber;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +41,24 @@ public class ContactActivity extends Activity implements OnClickListener{
 		
 		Bundle intentContactData = getIntent().getExtras();
 		if(intentContactData!=null){
-			String contactName = intentContactData.getString(IntentExtraKeys.CONTACT_NAME);
-			contactNameEditText.setText(contactName);
-			this.getActionBar().setTitle(contactName);
-			//TODO look up number from database if it exists
+			initialContactName = intentContactData.getString(IntentExtraKeys.CONTACT_NAME);
+			contactNameEditText.setText(initialContactName);
+			this.getActionBar().setTitle(initialContactName);
+			
+			//Look up number from database
+			String[] contactColumns = { ContactColumns.CONTACT_NUMBER };
+			String[] mWereClause = {initialContactName};
+			Cursor cursor = getContentResolver().query(
+					ContactColumns.CONTACTS_URI, // content URI for the provider.
+					contactColumns, // Return the names and  for each note.
+					ContactColumns.CONTACT_NAME + "=?", // selection clause
+					mWereClause, // selection clause args
+					null // Use the default sort order.
+					);
+			cursor.moveToFirst();
+			initialContactNumber = cursor.getString(0);
+			contactNumberEditText.setText(initialContactNumber);
+			
 		}
 		this.getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
@@ -66,23 +84,31 @@ public class ContactActivity extends Activity implements OnClickListener{
 			startActivity(messageIntent);
 			break;
 		case R.id.saveButton:
-			String contactName = contactNameEditText.getText().toString();
-			String contactNumber = contactNumberEditText.getText().toString();
+			//TODO implement database update instead of using delete + insert
+			
+			//remove old values
+			String contactSelect = ContactColumns.CONTACT_NAME + "=?";
+			String[] contactArg = { initialContactName };
+			this.getContentResolver().delete(
+					ContactColumns.CONTACTS_URI, contactSelect,
+					contactArg);
+			
+			String newContactName = contactNameEditText.getText().toString();
+			String newContactNumber = contactNumberEditText.getText().toString();
 			
 			// Defines an object to contain the values to insert
 			ContentValues mNewValues = new ContentValues();
 
-			/*
-			 * Sets the values of each column
-			 */
-			mNewValues.put(ContactColumns.CONTACT_NAME,contactName);
-			mNewValues.put(ContactColumns.CONTACT_NUMBER,contactNumber);
+			// Sets the values of each column
+			mNewValues.put(ContactColumns.CONTACT_NAME,newContactName);
+			mNewValues.put(ContactColumns.CONTACT_NUMBER,newContactNumber);
 			
 			this.getContentResolver().insert(ContactColumns.CONTACTS_URI,mNewValues);
 
-			//TODO remove old values
 			
-			this.getActionBar().setTitle(contactName);
+			this.getActionBar().setTitle(newContactName);
+			initialContactNumber = newContactNumber;
+			initialContactName = newContactName;
 			break;
 		}
 		

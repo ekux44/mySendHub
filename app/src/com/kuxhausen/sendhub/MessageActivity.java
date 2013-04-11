@@ -4,14 +4,12 @@ import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 public class MessageActivity extends Activity implements OnClickListener{
 
@@ -41,6 +39,7 @@ public class MessageActivity extends Activity implements OnClickListener{
 			sendButton.setOnClickListener(this);
 			
 			this.getActionBar().setDisplayHomeAsUpEnabled(true);
+			
 		}
 	}
 
