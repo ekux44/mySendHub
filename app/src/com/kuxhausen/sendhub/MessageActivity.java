@@ -1,11 +1,7 @@
 package com.kuxhausen.sendhub;
 
-import com.kuxhausen.sendhub.api.Message;
-import com.kuxhausen.sendhub.networking.SendMessage;
-import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,37 +9,43 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MessageActivity extends Activity implements OnClickListener{
+import com.kuxhausen.sendhub.api.Message;
+import com.kuxhausen.sendhub.networking.SendMessage;
+import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
+
+public class MessageActivity extends Activity implements OnClickListener {
 
 	private String name;
 	private String[] contacts;
 	private EditText messageBodyEditText;
 	private Button sendButton;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		//Abort if no contact data passed into messenger
+
+		// Abort if no contact data passed into messenger
 		Bundle intentContactData = getIntent().getExtras();
-		if(intentContactData==null)
+		if (intentContactData == null)
 			finish();
-		else{
+		else {
 			setContentView(R.layout.activity_message);
-			
+
 			name = intentContactData.getString(IntentExtraKeys.CONTACT_NAME);
 			contacts = new String[1];
-			contacts[0] = intentContactData.getString(IntentExtraKeys.CONTACT_ID);
-			
+			contacts[0] = intentContactData
+					.getString(IntentExtraKeys.CONTACT_ID);
+
 			this.getActionBar().setTitle(name);
-			
-			messageBodyEditText = (EditText)this.findViewById(R.id.messageBodyEditText);
-			
-			sendButton = (Button)this.findViewById(R.id.sendButton);
+
+			messageBodyEditText = (EditText) this
+					.findViewById(R.id.messageBodyEditText);
+
+			sendButton = (Button) this.findViewById(R.id.sendButton);
 			sendButton.setOnClickListener(this);
-			
+
 			this.getActionBar().setDisplayHomeAsUpEnabled(true);
-			
+
 		}
 	}
 
@@ -53,10 +55,10 @@ public class MessageActivity extends Activity implements OnClickListener{
 		getMenuInflater().inflate(R.menu.message, menu);
 		return true;
 	}
-	
+
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()){
+		switch (v.getId()) {
 		case R.id.sendButton:
 			Message message = new Message();
 			message.text = messageBodyEditText.getText().toString();
@@ -65,7 +67,7 @@ public class MessageActivity extends Activity implements OnClickListener{
 			transmit.execute();
 			break;
 		}
-		
+
 	}
 
 	@Override
@@ -73,8 +75,8 @@ public class MessageActivity extends Activity implements OnClickListener{
 		// Handle item selection
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			//up button pressed
-			//TODO go up instead of back
+			// up button pressed
+			// TODO go up instead of back
 			this.onBackPressed();
 			return true;
 		default:

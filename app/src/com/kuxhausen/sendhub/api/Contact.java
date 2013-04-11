@@ -4,7 +4,8 @@ public class Contact {
 	public String id;
 	public String name;
 	public String number;
-	public Contact(){
-		
+
+	public Contact() {
+
 	}
 }

@@ -1,46 +1,53 @@
 package com.kuxhausen.sendhub.networking;
 
 import java.io.IOException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import com.google.gson.Gson;
-import com.kuxhausen.sendhub.api.Message;
-import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.PreferenceKeys;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.kuxhausen.sendhub.api.Message;
+import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.PreferenceKeys;
+
 public class SendMessage extends AsyncTask<Void, Void, Boolean> {
 
-	Context context;
-	Message message;
-	Gson gson = new Gson();
+	private Context context;
+	private Message message;
+	private Gson gson = new Gson();
 
-	public SendMessage(Context cont, Message msg){
+	public SendMessage(Context cont, Message msg) {
 		context = cont;
 		message = msg;
 	}
-	
+
 	@Override
-	protected Boolean doInBackground(Void...voids) {
+	protected Boolean doInBackground(Void... voids) {
 
 		// Get username and IP from preferences cache
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		String number = settings.getString(PreferenceKeys.USERNAME,null);
-		String apiKey = "4cd29785eb1d0e21de8747d9e636f420028854a3"; //TODO secure this string
+		String number = settings.getString(PreferenceKeys.USERNAME, null);
+		String apiKey = "4cd29785eb1d0e21de8747d9e636f420028854a3"; // TODO
+																	// secure
+																	// this
+																	// string
 
 		StringBuilder builder = new StringBuilder();
 		HttpClient httpclient = new DefaultHttpClient();
 
-		//https://api.sendhub.com/v1/messages/?username=NUMBER&api_key=APIKEY
-		HttpPost httppost = new HttpPost("https://api.sendhub.com/v1/messages/?username="+number+ "&api_key="+apiKey);
+		// https://api.sendhub.com/v1/messages/?username=NUMBER&api_key=APIKEY
+		HttpPost httppost = new HttpPost(
+				"https://api.sendhub.com/v1/messages/?username=" + number
+						+ "&api_key=" + apiKey);
 		try {
 
 			StringEntity se = new StringEntity(gson.toJson(message));

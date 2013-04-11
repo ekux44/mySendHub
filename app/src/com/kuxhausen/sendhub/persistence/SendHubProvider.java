@@ -2,8 +2,6 @@ package com.kuxhausen.sendhub.persistence;
 
 import java.util.HashMap;
 
-import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,9 +13,11 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
+
 public class SendHubProvider extends ContentProvider {
 
-	DatabaseHelper mOpenHelper;
+	private DatabaseHelper mOpenHelper;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -49,7 +49,8 @@ public class SendHubProvider extends ContentProvider {
 			// Add a pattern that routes URIs terminated with "groups" to a
 			// GROUPS
 			// operation
-			sUriMatcher.addURI(DatabaseDefinitions.AUTHORITY, "contacts", CONTACTS);
+			sUriMatcher.addURI(DatabaseDefinitions.AUTHORITY, "contacts",
+					CONTACTS);
 			// Creates a new projection map instance. The map returns a column
 			// name
 			// given a string. The two are usually equal.
@@ -58,13 +59,16 @@ public class SendHubProvider extends ContentProvider {
 			// Maps the string "_ID" to the column name "_ID"
 			sContactsProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
 
-			sContactsProjectionMap.put(DatabaseDefinitions.ContactColumns.CONTACT_NAME,
+			sContactsProjectionMap.put(
+					DatabaseDefinitions.ContactColumns.CONTACT_NAME,
 					DatabaseDefinitions.ContactColumns.CONTACT_NAME);
-			sContactsProjectionMap.put(DatabaseDefinitions.ContactColumns.CONTACT_NUMBER,
+			sContactsProjectionMap.put(
+					DatabaseDefinitions.ContactColumns.CONTACT_NUMBER,
 					DatabaseDefinitions.ContactColumns.CONTACT_NUMBER);
-			sContactsProjectionMap.put(DatabaseDefinitions.ContactColumns.CONTACT_ID,
+			sContactsProjectionMap.put(
+					DatabaseDefinitions.ContactColumns.CONTACT_ID,
 					DatabaseDefinitions.ContactColumns.CONTACT_ID);
-			}
+		}
 	}
 
 	@Override
@@ -104,7 +108,7 @@ public class SendHubProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		
+
 		// Constructs a new query builder and sets its table name
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
@@ -131,7 +135,7 @@ public class SendHubProvider extends ContentProvider {
 		long insertId = db.insert(qb.getTables(), null, values);
 		if (insertId == -1) {
 			// insert failed, do update
-			//TODO update
+			// TODO update
 
 		}
 
@@ -207,6 +211,7 @@ public class SendHubProvider extends ContentProvider {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	private class DatabaseHelper extends SQLiteOpenHelper {
 
 		private static final String DATABASE_NAME = "sendhub.db";
@@ -220,8 +225,10 @@ public class SendHubProvider extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 
 			db.execSQL("CREATE TABLE " + ContactColumns.TABLE_NAME + " ("
-					+ BaseColumns._ID + " INTEGER PRIMARY KEY," + ContactColumns.CONTACT_NAME
-					+ " TEXT," + ContactColumns.CONTACT_NUMBER + " TEXT," + ContactColumns.CONTACT_ID + " TEXT" + ");");
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+					+ ContactColumns.CONTACT_NAME + " TEXT,"
+					+ ContactColumns.CONTACT_NUMBER + " TEXT,"
+					+ ContactColumns.CONTACT_ID + " TEXT" + ");");
 
 		}
 

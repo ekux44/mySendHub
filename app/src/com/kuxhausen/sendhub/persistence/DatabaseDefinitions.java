@@ -14,6 +14,7 @@ public class DatabaseDefinitions {
 		}
 
 	}
+
 	public static final class PreferenceKeys {
 		public static final String USERNAME = "UserName";
 
@@ -50,7 +51,7 @@ public class DatabaseDefinitions {
 		 * Contact number column
 		 */
 		public static final String CONTACT_NUMBER = "Contact_Number";
-		
+
 		/**
 		 * Contact id
 		 */
