@@ -61,6 +61,7 @@ public class ContactListActivity extends ListActivity implements
 			edit.commit();
 		}
 
+		//TODO only synch contacts sometimes
 		GetContacts pollContacts = new GetContacts(this, this);
 		pollContacts.execute();
 	}

@@ -80,7 +80,11 @@ public class ContactActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		// TODO validate number and notify user if invalid instead of continuing
+		/*
+		 *  TODO validate number and notify user if invalid instead of continuing
+		 *  Show toast or dialog explaining which/why input is invalid
+		 */
+		
 		switch (v.getId()) {
 		case R.id.messageButton:
 			Bundle contactData = new Bundle();
