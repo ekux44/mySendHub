@@ -1,14 +1,23 @@
 package com.kuxhausen.sendhub;
 
+import com.kuxhausen.sendhub.api.Contact;
+import com.kuxhausen.sendhub.networking.GetContacts;
+import com.kuxhausen.sendhub.networking.GetContacts.OnBulbListReturnedListener;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
+import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.PreferenceKeys;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +30,7 @@ import android.database.Cursor;
 import android.app.LoaderManager;
 
 public class ContactListActivity extends ListActivity implements
-LoaderManager.LoaderCallbacks<Cursor> {
+LoaderManager.LoaderCallbacks<Cursor>, OnBulbListReturnedListener{
 
 	// Identifies a particular Loader being used in this component
 	private static final int CONTACTS_LOADER = 0;
@@ -43,6 +52,18 @@ LoaderManager.LoaderCallbacks<Cursor> {
 				columns, new int[] { android.R.id.text1 }, 0);
 
 		setListAdapter(dataSource);
+		
+		//populate preferences if they don't exist yet
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		if (!settings.contains(PreferenceKeys.USERNAME)) {
+			Editor edit = settings.edit();
+			//TODO replace developer account with user specified account
+			edit.putString(PreferenceKeys.USERNAME, "8325527666"); 
+			edit.commit();
+		}
+		
+		GetContacts pollContacts = new GetContacts(this,this);
+		pollContacts.execute();
 	}
 
 	@Override
@@ -127,5 +148,23 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		 */
 		// unregisterForContextMenu(getListView());
 		dataSource.changeCursor(null);
+	}
+
+	@Override
+	public void onContactsListReturned(Contact[] result) {
+		if(result == null || result.length< 1)
+			return;
+		for(Contact contact : result){
+			// Defines an object to contain the values to insert
+			ContentValues mNewValues = new ContentValues();
+
+			// Sets the values of each column
+			mNewValues.put(ContactColumns.CONTACT_NAME,contact.name);
+			mNewValues.put(ContactColumns.CONTACT_NUMBER,contact.number);
+			mNewValues.put(ContactColumns.CONTACT_ID,contact.id);
+					
+			this.getContentResolver().insert(ContactColumns.CONTACTS_URI,mNewValues);
+		}
+		
 	}
 }

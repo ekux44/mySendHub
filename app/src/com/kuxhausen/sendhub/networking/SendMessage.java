@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gson.Gson;
+import com.kuxhausen.sendhub.api.Message;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.PreferenceKeys;
 
 import android.content.Context;
@@ -18,10 +19,10 @@ import android.preference.PreferenceManager;
 public class SendMessage extends AsyncTask<Void, Void, Boolean> {
 
 	Context context;
-	ApiMessage message;
+	Message message;
 	Gson gson = new Gson();
 
-	public SendMessage(Context cont, ApiMessage msg){
+	public SendMessage(Context cont, Message msg){
 		context = cont;
 		message = msg;
 	}

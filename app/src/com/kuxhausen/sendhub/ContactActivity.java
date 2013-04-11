@@ -22,7 +22,7 @@ public class ContactActivity extends Activity implements OnClickListener{
 
 	private Button messageButton, saveButton;
 	private EditText contactNameEditText, contactNumberEditText;
-	private String initialContactName, initialContactNumber;
+	private String initialContactName, initialContactNumber, contactID;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class ContactActivity extends Activity implements OnClickListener{
 			this.getActionBar().setTitle(initialContactName);
 			
 			//Look up number from database
-			String[] contactColumns = { ContactColumns.CONTACT_NUMBER };
+			String[] contactColumns = { ContactColumns.CONTACT_NUMBER, ContactColumns.CONTACT_ID };
 			String[] mWereClause = {initialContactName};
 			Cursor cursor = getContentResolver().query(
 					ContactColumns.CONTACTS_URI, // content URI for the provider.
@@ -58,6 +58,7 @@ public class ContactActivity extends Activity implements OnClickListener{
 			cursor.moveToFirst();
 			initialContactNumber = cursor.getString(0);
 			contactNumberEditText.setText(initialContactNumber);
+			contactID = cursor.getString(1);
 			
 		}
 		this.getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,14 +78,14 @@ public class ContactActivity extends Activity implements OnClickListener{
 		case R.id.messageButton:
 			Bundle contactData = new Bundle();
 			contactData.putString(IntentExtraKeys.CONTACT_NAME, contactNameEditText.getText().toString());
-			contactData.putString(IntentExtraKeys.CONTACT_NUMBER, contactNumberEditText.getText().toString());
+			contactData.putString(IntentExtraKeys.CONTACT_ID, contactID);
 			
 			Intent messageIntent = new Intent(this, MessageActivity.class);
 			messageIntent.putExtras(contactData);
 			startActivity(messageIntent);
 			break;
 		case R.id.saveButton:
-			//TODO implement database update instead of using delete + insert
+			//TODO implement database update instead of using delete + insert, implement upload to sendhub
 			
 			//remove old values
 			String contactSelect = ContactColumns.CONTACT_NAME + "=?";

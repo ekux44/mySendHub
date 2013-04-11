@@ -1,6 +1,6 @@
 package com.kuxhausen.sendhub;
 
-import com.kuxhausen.sendhub.networking.ApiMessage;
+import com.kuxhausen.sendhub.api.Message;
 import com.kuxhausen.sendhub.networking.SendMessage;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
@@ -15,7 +15,8 @@ import android.widget.EditText;
 
 public class MessageActivity extends Activity implements OnClickListener{
 
-	private String name, number;
+	private String name;
+	private String[] contacts;
 	private EditText messageBodyEditText;
 	private Button sendButton;
 	
@@ -31,7 +32,8 @@ public class MessageActivity extends Activity implements OnClickListener{
 			setContentView(R.layout.activity_message);
 			
 			name = intentContactData.getString(IntentExtraKeys.CONTACT_NAME);
-			number = intentContactData.getString(IntentExtraKeys.CONTACT_NUMBER);
+			contacts = new String[1];
+			contacts[0] = intentContactData.getString(IntentExtraKeys.CONTACT_ID);
 			
 			this.getActionBar().setTitle(name);
 			
@@ -56,9 +58,9 @@ public class MessageActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.sendButton:
-			ApiMessage message = new ApiMessage();
+			Message message = new Message();
 			message.text = messageBodyEditText.getText().toString();
-			message.contacts = null;//TODO
+			message.contacts = contacts;
 			SendMessage transmit = new SendMessage(this, message);
 			transmit.execute();
 			break;

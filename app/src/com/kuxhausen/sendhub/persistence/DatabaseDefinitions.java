@@ -7,6 +7,7 @@ public class DatabaseDefinitions {
 	public static final class IntentExtraKeys {
 		public static final String CONTACT_NAME = "Contact_Name";
 		public static final String CONTACT_NUMBER = "Contact_Number";
+		public static final String CONTACT_ID = "Contact_Id";
 
 		// This class cannot be instantiated
 		private IntentExtraKeys() {
@@ -49,6 +50,11 @@ public class DatabaseDefinitions {
 		 * Contact number column
 		 */
 		public static final String CONTACT_NUMBER = "Contact_Number";
+		
+		/**
+		 * Contact id
+		 */
+		public static final String CONTACT_ID = "Contact_ID";
 
 		// This class cannot be instantiated
 		private ContactColumns() {

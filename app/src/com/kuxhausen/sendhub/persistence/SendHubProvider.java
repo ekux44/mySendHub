@@ -62,6 +62,8 @@ public class SendHubProvider extends ContentProvider {
 					DatabaseDefinitions.ContactColumns.CONTACT_NAME);
 			sContactsProjectionMap.put(DatabaseDefinitions.ContactColumns.CONTACT_NUMBER,
 					DatabaseDefinitions.ContactColumns.CONTACT_NUMBER);
+			sContactsProjectionMap.put(DatabaseDefinitions.ContactColumns.CONTACT_ID,
+					DatabaseDefinitions.ContactColumns.CONTACT_ID);
 			}
 	}
 
@@ -208,7 +210,7 @@ public class SendHubProvider extends ContentProvider {
 	private class DatabaseHelper extends SQLiteOpenHelper {
 
 		private static final String DATABASE_NAME = "sendhub.db";
-		private static final int DATABASE_VERSION = 1;
+		private static final int DATABASE_VERSION = 2;
 
 		public DatabaseHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -219,13 +221,13 @@ public class SendHubProvider extends ContentProvider {
 
 			db.execSQL("CREATE TABLE " + ContactColumns.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY," + ContactColumns.CONTACT_NAME
-					+ " TEXT," + ContactColumns.CONTACT_NUMBER + " TEXT" + ");");
+					+ " TEXT," + ContactColumns.CONTACT_NUMBER + " TEXT," + ContactColumns.CONTACT_ID + " TEXT" + ");");
 
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("DROP TABLE IF EXISTS notes");
+			db.execSQL("DROP TABLE IF EXISTS sendhub");
 			onCreate(db);
 		}
 	}
