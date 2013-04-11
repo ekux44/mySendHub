@@ -81,7 +81,7 @@ public class GetContacts extends AsyncTask<Void, Void, Contact[]> {
 						Contacts.class);
 				return resultContacts.objects;
 			} else {
-				//TODO handle error responses
+				// TODO handle error responses
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

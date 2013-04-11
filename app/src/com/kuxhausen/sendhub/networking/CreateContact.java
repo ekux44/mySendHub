@@ -73,7 +73,7 @@ public class CreateContact extends AsyncTask<Void, Void, String> {
 			HttpResponse response = httpclient.execute(httppost);
 			StatusLine statusLine = response.getStatusLine();
 			int statusCode = statusLine.getStatusCode();
-			
+
 			if (statusCode == 201) {
 
 				HttpEntity entity = response.getEntity();
@@ -90,8 +90,8 @@ public class CreateContact extends AsyncTask<Void, Void, String> {
 				Contact resultContacts = gson.fromJson(returnOutput,
 						Contact.class);
 				return resultContacts.id;
-			}else{
-				//TODO handle error responses
+			} else {
+				// TODO handle error responses
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

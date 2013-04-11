@@ -19,7 +19,8 @@ import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
 //TODO validate EditText's when their next/done keyboard buttons pressed
-public class ContactActivity extends Activity implements OnClickListener, OnIdReturnedListener {
+public class ContactActivity extends Activity implements OnClickListener,
+		OnIdReturnedListener {
 
 	private Button messageButton, saveButton;
 	private EditText contactNameEditText, contactNumberEditText;
@@ -94,36 +95,12 @@ public class ContactActivity extends Activity implements OnClickListener, OnIdRe
 		case R.id.saveButton:
 			// Upload to sendhub
 			Contact current = new Contact();
-			current.name= contactNameEditText.getText().toString();
+			current.name = contactNameEditText.getText().toString();
 			current.number = contactNumberEditText.getText().toString();
-			
+
 			CreateContact pollContacts = new CreateContact(this, this, current);
 			pollContacts.execute();
-			// TODO implement db update instead of using delete + insert
-			// remove old values from local database
-			if (contactID != null) { //if contactID != null, contact api call succeeded
-				String contactSelect = ContactColumns.CONTACT_ID + "=?";
-				String[] contactArg = { contactID };
-				this.getContentResolver().delete(ContactColumns.CONTACTS_URI,
-						contactSelect, contactArg);
-			
-			contactName = contactNameEditText.getText().toString();
-			contactNumber = contactNumberEditText.getText().toString();
-
-			// Defines an object to contain the values to insert
-			ContentValues mNewValues = new ContentValues();
-
-			// Sets the values of each column
-			mNewValues.put(ContactColumns.CONTACT_NAME, contactName);
-			mNewValues.put(ContactColumns.CONTACT_NUMBER, contactNumber);
-			mNewValues.put(ContactColumns.CONTACT_ID, contactID);
-
-			// Put updated values in local database
-			this.getContentResolver().insert(ContactColumns.CONTACTS_URI,
-					mNewValues);
-
-			this.getActionBar().setTitle(contactName);
-			}
+			// rest of save action handled in onIDReturned
 			break;
 		}
 
@@ -145,8 +122,34 @@ public class ContactActivity extends Activity implements OnClickListener, OnIdRe
 
 	@Override
 	public void onIdReturned(String id) {
-		if(id!=null){
+		if (id != null) {// contact api call succeeded
 			contactID = id;
+
+			// TODO implement db update instead of using delete + insert
+
+			// remove old values from local database
+			String contactSelect = ContactColumns.CONTACT_ID + "=?";
+			String[] contactArg = { contactID };
+			this.getContentResolver().delete(ContactColumns.CONTACTS_URI,
+					contactSelect, contactArg);
+
+			contactName = contactNameEditText.getText().toString();
+			contactNumber = contactNumberEditText.getText().toString();
+
+			// Defines an object to contain the values to insert
+			ContentValues mNewValues = new ContentValues();
+
+			// Sets the values of each column
+			mNewValues.put(ContactColumns.CONTACT_NAME, contactName);
+			mNewValues.put(ContactColumns.CONTACT_NUMBER, contactNumber);
+			mNewValues.put(ContactColumns.CONTACT_ID, contactID);
+
+			// Put updated values in local database
+			this.getContentResolver().insert(ContactColumns.CONTACTS_URI,
+					mNewValues);
+
+			this.getActionBar().setTitle(contactName);
+
 		}
 	}
 
