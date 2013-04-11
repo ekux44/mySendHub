@@ -1,5 +1,7 @@
 package com.kuxhausen.sendhub;
 
+import com.kuxhausen.sendhub.networking.ApiMessage;
+import com.kuxhausen.sendhub.networking.SendMessage;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
 import android.os.Bundle;
@@ -54,7 +56,11 @@ public class MessageActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.sendButton:
-			//TODO send
+			ApiMessage message = new ApiMessage();
+			message.text = messageBodyEditText.getText().toString();
+			message.contacts = null;//TODO
+			SendMessage transmit = new SendMessage(this, message);
+			transmit.execute();
 			break;
 		}
 		

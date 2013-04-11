@@ -1,21 +1,12 @@
 package com.kuxhausen.sendhub.networking;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import com.google.gson.Gson;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.PreferenceKeys;
 
@@ -24,19 +15,19 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-public class SendMessage extends AsyncTask<Object, Void, Boolean> {
+public class SendMessage extends AsyncTask<Void, Void, Boolean> {
 
 	Context context;
-	Message message;
+	ApiMessage message;
 	Gson gson = new Gson();
 
-	public SendMessage(Context cont, Message msg){
+	public SendMessage(Context cont, ApiMessage msg){
 		context = cont;
 		message = msg;
 	}
 	
 	@Override
-	protected Boolean doInBackground(Object... params) {
+	protected Boolean doInBackground(Void...voids) {
 
 		// Get username and IP from preferences cache
 		SharedPreferences settings = PreferenceManager

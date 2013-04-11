@@ -1,10 +1,10 @@
 package com.kuxhausen.sendhub.networking;
 
-public class Message {
+public class ApiMessage {
 
 	public String[] contacts;
 	public String text;
 
-	public Message() {
+	public ApiMessage() {
 	}
 }
