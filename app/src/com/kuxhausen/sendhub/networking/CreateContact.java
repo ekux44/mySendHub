@@ -1,8 +1,13 @@
 package com.kuxhausen.sendhub.networking;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -15,22 +20,29 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
-import com.kuxhausen.sendhub.api.Message;
+import com.kuxhausen.sendhub.api.Contact;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.PreferenceKeys;
 
-public class SendMessage extends AsyncTask<Void, Void, Boolean> {
+public class CreateContact extends AsyncTask<Void, Void, String> {
 
 	private Context context;
-	private Message message;
+	private Contact contact;
 	private Gson gson = new Gson();
+	private OnIdReturnedListener listener;
 
-	public SendMessage(Context cont, Message msg) {
+	public interface OnIdReturnedListener {
+		/** Called by HeadlinesFragment when a list item is selected */
+		public void onIdReturned(String id);
+	}
+
+	public CreateContact(Context cont, OnIdReturnedListener listen, Contact con) {
 		context = cont;
-		message = msg;
+		listener = listen;
+		contact = con;
 	}
 
 	@Override
-	protected Boolean doInBackground(Void... voids) {
+	protected String doInBackground(Void... voids) {
 
 		// Get username and IP from preferences cache
 		SharedPreferences settings = PreferenceManager
@@ -44,13 +56,12 @@ public class SendMessage extends AsyncTask<Void, Void, Boolean> {
 		StringBuilder builder = new StringBuilder();
 		HttpClient httpclient = new DefaultHttpClient();
 
-		// https://api.sendhub.com/v1/messages/?username=NUMBER&api_key=APIKEY
 		HttpPost httppost = new HttpPost(
-				"https://api.sendhub.com/v1/messages/?username=" + number
+				"https://api.sendhub.com/v1/contacts/?username=" + number
 						+ "&api_key=" + apiKey);
 		try {
 
-			StringEntity se = new StringEntity(gson.toJson(message));
+			StringEntity se = new StringEntity(gson.toJson(contact));
 			// sets the post request as the resulting string
 			httppost.setEntity(se);
 			// sets a request header so the page receiving the request
@@ -60,22 +71,39 @@ public class SendMessage extends AsyncTask<Void, Void, Boolean> {
 
 			// execute HTTP post request
 			HttpResponse response = httpclient.execute(httppost);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			
+			if (statusCode == 201) {
 
-			// TODO analyze the response
-			return true;
+				HttpEntity entity = response.getEntity();
+				InputStream content = entity.getContent();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(content));
 
+				String returnOutput = "";
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+					returnOutput += line;
+				}
+				Contact resultContacts = gson.fromJson(returnOutput,
+						Contact.class);
+				return resultContacts.id;
+			}else{
+				//TODO handle error responses
+			}
 		} catch (ClientProtocolException e) {
-
 			// TODO Auto-generated catch block
 		} catch (IOException e) {
-
 			// TODO Auto-generated catch block
 		}
-		return false;
+		return null;
 	}
 
 	@Override
-	protected void onPostExecute(Boolean success) {
+	protected void onPostExecute(String contactID) {
+		listener.onIdReturned(contactID);
 	}
 
 }

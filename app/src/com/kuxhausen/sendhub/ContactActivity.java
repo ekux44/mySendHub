@@ -12,11 +12,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.kuxhausen.sendhub.api.Contact;
+import com.kuxhausen.sendhub.networking.CreateContact;
+import com.kuxhausen.sendhub.networking.CreateContact.OnIdReturnedListener;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.ContactColumns;
 import com.kuxhausen.sendhub.persistence.DatabaseDefinitions.IntentExtraKeys;
 
 //TODO validate EditText's when their next/done keyboard buttons pressed
-public class ContactActivity extends Activity implements OnClickListener {
+public class ContactActivity extends Activity implements OnClickListener, OnIdReturnedListener {
 
 	private Button messageButton, saveButton;
 	private EditText contactNameEditText, contactNumberEditText;
@@ -89,17 +92,21 @@ public class ContactActivity extends Activity implements OnClickListener {
 			startActivity(messageIntent);
 			break;
 		case R.id.saveButton:
-			// TODO implement upload to sendhub
-
-			// TODO implement database update to instead of using delete +
-			// insert
-			// remove old values
-			if (contactID != null) {
+			// Upload to sendhub
+			Contact current = new Contact();
+			current.name= contactNameEditText.getText().toString();
+			current.number = contactNumberEditText.getText().toString();
+			
+			CreateContact pollContacts = new CreateContact(this, this, current);
+			pollContacts.execute();
+			// TODO implement db update instead of using delete + insert
+			// remove old values from local database
+			if (contactID != null) { //if contactID != null, contact api call succeeded
 				String contactSelect = ContactColumns.CONTACT_ID + "=?";
 				String[] contactArg = { contactID };
 				this.getContentResolver().delete(ContactColumns.CONTACTS_URI,
 						contactSelect, contactArg);
-			}
+			
 			contactName = contactNameEditText.getText().toString();
 			contactNumber = contactNumberEditText.getText().toString();
 
@@ -109,11 +116,14 @@ public class ContactActivity extends Activity implements OnClickListener {
 			// Sets the values of each column
 			mNewValues.put(ContactColumns.CONTACT_NAME, contactName);
 			mNewValues.put(ContactColumns.CONTACT_NUMBER, contactNumber);
+			mNewValues.put(ContactColumns.CONTACT_ID, contactID);
 
+			// Put updated values in local database
 			this.getContentResolver().insert(ContactColumns.CONTACTS_URI,
 					mNewValues);
 
 			this.getActionBar().setTitle(contactName);
+			}
 			break;
 		}
 
@@ -130,6 +140,13 @@ public class ContactActivity extends Activity implements OnClickListener {
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public void onIdReturned(String id) {
+		if(id!=null){
+			contactID = id;
 		}
 	}
 
