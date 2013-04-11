@@ -13,6 +13,14 @@ public class DatabaseDefinitions {
 		}
 
 	}
+	public static final class PreferenceKeys {
+		public static final String USERNAME = "UserName";
+
+		// This class cannot be instantiated
+		private PreferenceKeys() {
+		}
+
+	}
 
 	public static final class ContactColumns implements BaseColumns {
 		/**
